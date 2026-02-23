@@ -1,4 +1,4 @@
-# AWS Glue Data Replication
+# Sample Data Replication with AWS Glue
 
 A comprehensive AWS Glue-based data replication solution that supports full-load and incremental data migration across multiple database types with cross-VPC network connectivity.
 
