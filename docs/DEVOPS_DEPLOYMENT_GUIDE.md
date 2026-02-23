@@ -171,180 +171,63 @@ aws cloudformation validate-template \
 
 ### Step 2: Parameter File Creation
 
-Create a parameters file based on your environment and network configuration. Choose the appropriate template based on your network scenario:
+Create a parameter file based on your environment. Parameter files use the flat JSON format (`.tfvars.json`). For the full list of available parameters, see [Parameter Reference](PARAMETER_REFERENCE.md). For ready-to-use templates, copy one of the files from the `examples/` directory and customize it:
 
-#### Same VPC Configuration (Default)
+| Example File | Scenario |
+|-------------|----------|
+| [`oracle-to-oracle-parameters.tfvars.json`](../examples/oracle-to-oracle-parameters.tfvars.json) | Oracle to Oracle with cross-VPC |
+| [`sqlserver-to-sqlserver-parameters.tfvars.json`](../examples/sqlserver-to-sqlserver-parameters.tfvars.json) | SQL Server to SQL Server with Glue Connections |
+| [`sqlserver-to-iceberg-parameters.tfvars.json`](../examples/sqlserver-to-iceberg-parameters.tfvars.json) | SQL Server to Iceberg data lake ingestion |
+| [`sqlserver-to-sqlserver-kerberos-parameters.tfvars.json`](../examples/sqlserver-to-sqlserver-kerberos-parameters.tfvars.json) | SQL Server with Kerberos authentication |
+| [`iceberg-to-iceberg-parameters.tfvars.json`](../examples/iceberg-to-iceberg-parameters.tfvars.json) | Iceberg to Iceberg replication |
+| [`iceberg-cross-account-source-parameters.tfvars.json`](../examples/iceberg-cross-account-source-parameters.tfvars.json) | Iceberg cross-account (source side) |
+| [`iceberg-cross-account-target-parameters.tfvars.json`](../examples/iceberg-cross-account-target-parameters.tfvars.json) | Iceberg cross-account (target side) |
+| [`iceberg-multi-region-parameters.tfvars.json`](../examples/iceberg-multi-region-parameters.tfvars.json) | Iceberg multi-region |
+
+#### Same VPC Configuration
+
+When both databases are in the same VPC (the most common production setup), you still need to provide the source VPC, subnet, and security group parameters so that Glue can place ENIs in the VPC and reach the databases. Databases in private subnets are the expected configuration — publicly accessible databases are an anti-pattern and should be avoided.
 
 ```json
-[
-  {
-    "ParameterKey": "JobName",
-    "ParameterValue": "prod-oracle-to-postgres"
-  },
-  {
-    "ParameterKey": "SourceEngineType",
-    "ParameterValue": "oracle"
-  },
-  {
-    "ParameterKey": "TargetEngineType",
-    "ParameterValue": "postgresql"
-  },
-  {
-    "ParameterKey": "SourceDatabase",
-    "ParameterValue": "PRODDB"
-  },
-  {
-    "ParameterKey": "TargetDatabase",
-    "ParameterValue": "analytics_db"
-  },
-  {
-    "ParameterKey": "SourceSchema",
-    "ParameterValue": "SALES"
-  },
-  {
-    "ParameterKey": "TargetSchema",
-    "ParameterValue": "public"
-  },
-  {
-    "ParameterKey": "TableNames",
-    "ParameterValue": "customers,orders,order_items,products"
-  },
-  {
-    "ParameterKey": "SourceDbUser",
-    "ParameterValue": "replication_user"
-  },
-  {
-    "ParameterKey": "SourceDbPassword",
-    "ParameterValue": "your-secure-source-password"
-  },
-  {
-    "ParameterKey": "TargetDbUser",
-    "ParameterValue": "postgres"
-  },
-  {
-    "ParameterKey": "TargetDbPassword",
-    "ParameterValue": "your-secure-target-password"
-  },
-  {
-    "ParameterKey": "SourceConnectionString",
-    "ParameterValue": "jdbc:oracle:thin:@prod-oracle.company.com:1521:PRODDB"
-  },
-  {
-    "ParameterKey": "TargetConnectionString",
-    "ParameterValue": "jdbc:postgresql://analytics-postgres.company.com:5432/analytics_db"
-  },
-  {
-    "ParameterKey": "SourceJdbcDriverS3Path",
-    "ParameterValue": "s3://company-glue-assets/jdbc-drivers/oracle/21.7.0.0/ojdbc11.jar"
-  },
-  {
-    "ParameterKey": "TargetJdbcDriverS3Path",
-    "ParameterValue": "s3://company-glue-assets/jdbc-drivers/postgresql/42.6.0/postgresql-42.6.0.jar"
-  }
-]
+{
+  "JobName": "prod-oracle-to-postgres",
+  "SourceEngineType": "oracle",
+  "TargetEngineType": "postgresql",
+  "SourceDatabase": "PRODDB",
+  "TargetDatabase": "analytics_db",
+  "SourceSchema": "SALES",
+  "TargetSchema": "public",
+  "TableNames": "customers,orders,order_items,products",
+  "SourceDbUser": "replication_user",
+  "SourceDbPassword": "your-secure-source-password",
+  "TargetDbUser": "postgres",
+  "TargetDbPassword": "your-secure-target-password",
+  "SourceConnectionString": "jdbc:oracle:thin:@prod-oracle.company.com:1521:PRODDB",
+  "TargetConnectionString": "jdbc:postgresql://analytics-postgres.company.com:5432/analytics_db",
+  "SourceJdbcDriverS3Path": "s3://company-glue-assets/jdbc-drivers/oracle/21.7.0.0/ojdbc11.jar",
+  "TargetJdbcDriverS3Path": "s3://company-glue-assets/jdbc-drivers/postgresql/42.6.0/postgresql-42.6.0.jar",
+  "SourceVpcId": "vpc-shared-databases",
+  "SourceSubnetIds": "subnet-private-1a,subnet-private-1b",
+  "SourceSecurityGroupIds": "sg-glue-database-access",
+  "SourceAvailabilityZone": "us-east-1a",
+  "CreateSourceS3VpcEndpoint": "YES"
+}
 ```
 
-#### Cross-VPC Configuration Example
+Since both databases share the same VPC, only the source-side network parameters are needed — the Glue Connection created in that VPC can reach both databases. Set `CreateSourceS3VpcEndpoint` to `YES` if the subnets are private (no internet gateway route), so the Glue job can access S3 for drivers and bookmarks.
 
-```json
-[
-  {
-    "ParameterKey": "JobName",
-    "ParameterValue": "cross-vpc-oracle-to-postgres"
-  },
-  {
-    "ParameterKey": "SourceEngineType",
-    "ParameterValue": "oracle"
-  },
-  {
-    "ParameterKey": "TargetEngineType",
-    "ParameterValue": "postgresql"
-  },
-  {
-    "ParameterKey": "SourceDatabase",
-    "ParameterValue": "PRODDB"
-  },
-  {
-    "ParameterKey": "TargetDatabase",
-    "ParameterValue": "analytics_db"
-  },
-  {
-    "ParameterKey": "SourceSchema",
-    "ParameterValue": "SALES"
-  },
-  {
-    "ParameterKey": "TargetSchema",
-    "ParameterValue": "public"
-  },
-  {
-    "ParameterKey": "TableNames",
-    "ParameterValue": "customers,orders,order_items,products"
-  },
-  {
-    "ParameterKey": "SourceDbUser",
-    "ParameterValue": "replication_user"
-  },
-  {
-    "ParameterKey": "SourceDbPassword",
-    "ParameterValue": "your-secure-source-password"
-  },
-  {
-    "ParameterKey": "TargetDbUser",
-    "ParameterValue": "postgres"
-  },
-  {
-    "ParameterKey": "TargetDbPassword",
-    "ParameterValue": "your-secure-target-password"
-  },
-  {
-    "ParameterKey": "SourceConnectionString",
-    "ParameterValue": "jdbc:oracle:thin:@prod-oracle.company.com:1521:PRODDB"
-  },
-  {
-    "ParameterKey": "TargetConnectionString",
-    "ParameterValue": "jdbc:postgresql://analytics-postgres.company.com:5432/analytics_db"
-  },
-  {
-    "ParameterKey": "SourceJdbcDriverS3Path",
-    "ParameterValue": "s3://company-glue-assets/jdbc-drivers/oracle/21.7.0.0/ojdbc11.jar"
-  },
-  {
-    "ParameterKey": "TargetJdbcDriverS3Path",
-    "ParameterValue": "s3://company-glue-assets/jdbc-drivers/postgresql/42.6.0/postgresql-42.6.0.jar"
-  },
-  {
-    "ParameterKey": "SourceVpcId",
-    "ParameterValue": "vpc-prod-oracle-123"
-  },
-  {
-    "ParameterKey": "SourceSubnetIds",
-    "ParameterValue": "subnet-prod-db-1a,subnet-prod-db-1b"
-  },
-  {
-    "ParameterKey": "SourceSecurityGroupIds",
-    "ParameterValue": "sg-oracle-glue-access"
-  },
-  {
-    "ParameterKey": "CreateSourceS3VpcEndpoint",
-    "ParameterValue": "YES"
-  },
-  {
-    "ParameterKey": "TargetVpcId",
-    "ParameterValue": "vpc-analytics-456"
-  },
-  {
-    "ParameterKey": "TargetSubnetIds",
-    "ParameterValue": "subnet-analytics-1a,subnet-analytics-1b"
-  },
-  {
-    "ParameterKey": "TargetSecurityGroupIds",
-    "ParameterValue": "sg-postgres-glue-access"
-  },
-  {
-    "ParameterKey": "CreateTargetS3VpcEndpoint",
-    "ParameterValue": "NO"
-  }
-]
+#### Cross-VPC Configuration
+
+When databases are in different VPCs, add both source and target network parameters. See [`sqlserver-to-iceberg-parameters.tfvars.json`](../examples/sqlserver-to-iceberg-parameters.tfvars.json) for a working example with cross-VPC source configuration, or [`oracle-to-oracle-parameters.tfvars.json`](../examples/oracle-to-oracle-parameters.tfvars.json) for a dual-VPC setup.
+
+The full set of network parameters is documented in the [Network Configuration](PARAMETER_REFERENCE.md#network-configuration) section of the Parameter Reference.
+
+#### CloudFormation Array Format (Legacy)
+
+If your pipeline requires the legacy CloudFormation array format (`[{"ParameterKey": "...", "ParameterValue": "..."}]`), convert from flat JSON using the included script:
+
+```bash
+python3 infrastructure/scripts/convert_params.py --to-cfn my-params.tfvars.json my-cfn-params.json
 ```
 
 #### Network Parameter Guidelines
