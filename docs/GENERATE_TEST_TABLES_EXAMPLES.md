@@ -611,16 +611,12 @@ java -cp ".:mssql-jdbc-12.2.0.jre11.jar" TestDataLoader \
 
 ## Integration with AWS Glue Parameters
 
-After generating your test tables, update your CloudFormation parameters:
+After generating your test tables, update your CloudFormation/Terraform parameters:
 
 ```json
 {
-  "ParameterKey": "SourceSchema",
-  "ParameterValue": "HR"
-},
-{
-  "ParameterKey": "TableNames", 
-  "ParameterValue": "customers,orders,products,inventory,order_items"
+  "SourceSchema": "HR",
+  "TableNames": "customers,orders,products,inventory,order_items"
 }
 ```
 

@@ -171,36 +171,24 @@ fields @timestamp, @message
 ### Log Retention Configuration
 ```json
 {
-  "ParameterKey": "LogRetentionDays",
-  "ParameterValue": "30"  // Standard logs retention
-},
-{
-  "ParameterKey": "ErrorLogRetentionDays", 
-  "ParameterValue": "90"  // Error logs retention (typically longer)
+  "LogRetentionDays": "30",
+  "ErrorLogRetentionDays": "90"
 }
 ```
 
 ### Observability Feature Toggles
 ```json
 {
-  "ParameterKey": "EnableCloudWatchDashboard",
-  "ParameterValue": "YES"  // Create monitoring dashboard
-},
-{
-  "ParameterKey": "EnableCloudWatchAlarms",
-  "ParameterValue": "YES"  // Create monitoring alarms
+  "EnableCloudWatchDashboard": "YES",
+  "EnableCloudWatchAlarms": "YES"
 }
 ```
 
 ### Notification Configuration
 ```json
 {
-  "ParameterKey": "AlarmNotificationEmail",
-  "ParameterValue": "admin@company.com"  // Email for alarm notifications
-},
-{
-  "ParameterKey": "JobDurationThresholdMinutes",
-  "ParameterValue": "60"  // Alarm threshold for long-running jobs
+  "AlarmNotificationEmail": "[email]",
+  "JobDurationThresholdMinutes": "60"
 }
 ```
 

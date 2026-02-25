@@ -488,8 +488,7 @@ python -m json.tool parameters.json
 1. **Use Correct Boolean Format:**
    ```json
    {
-     "ParameterKey": "createSourceConnection",
-     "ParameterValue": "true"
+     "createSourceConnection": "true"
    }
    ```
 

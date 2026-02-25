@@ -103,32 +103,23 @@ The manual bookmark configuration is provided through the `ManualBookmarkConfig`
 
 #### Single Table Configuration
 ```json
-[
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"employees\":\"last_modified_date\"}"
-  }
-]
+{
+  "ManualBookmarkConfig": "{\"employees\":\"last_modified_date\"}"
+}
 ```
 
 #### Multiple Tables Configuration
 ```json
-[
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"employees\":\"updated_at\",\"orders\":\"order_id\",\"audit_log\":\"audit_timestamp\"}"
-  }
-]
+{
+  "ManualBookmarkConfig": "{\"employees\":\"updated_at\",\"orders\":\"order_id\",\"audit_log\":\"audit_timestamp\"}"
+}
 ```
 
 #### Partial Configuration (Hybrid Approach)
 ```json
-[
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"critical_table\":\"business_timestamp\"}"
-  }
-]
+{
+  "ManualBookmarkConfig": "{\"critical_table\":\"business_timestamp\"}"
+}
 ```
 *Note: Other tables in the job will use automatic detection*
 
@@ -136,14 +127,11 @@ The manual bookmark configuration is provided through the `ManualBookmarkConfig`
 
 ### PostgreSQL Configuration
 
-**CloudFormation Parameter:**
+**Parameter:**
 ```json
-[
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"users\":\"updated_at\",\"sessions\":\"session_id\",\"events\":\"event_timestamp\"}"
-  }
-]
+{
+  "ManualBookmarkConfig": "{\"users\":\"updated_at\",\"sessions\":\"session_id\",\"events\":\"event_timestamp\"}"
+}
 ```
 
 **Configuration Content:**
@@ -162,14 +150,11 @@ The manual bookmark configuration is provided through the `ManualBookmarkConfig`
 
 ### Oracle Configuration
 
-**CloudFormation Parameter:**
+**Parameter:**
 ```json
-[
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"employees\":\"last_modified\",\"departments\":\"dept_id\",\"audit_trail\":\"audit_date\"}"
-  }
-]
+{
+  "ManualBookmarkConfig": "{\"employees\":\"last_modified\",\"departments\":\"dept_id\",\"audit_trail\":\"audit_date\"}"
+}
 ```
 
 **Configuration Content:**
@@ -188,26 +173,14 @@ The manual bookmark configuration is provided through the `ManualBookmarkConfig`
 
 ### SQL Server Configuration
 
-**Complete Example from `examples/sqlserver-to-sqlserver-parameters-with-manual-bookmarks.json`:**
+**Complete Example from `examples/sqlserver-to-sqlserver-parameters-with-manual-bookmarks.tfvars.json`:**
 ```json
-[
-  {
-    "ParameterKey": "SourceEngineType",
-    "ParameterValue": "sqlserver"
-  },
-  {
-    "ParameterKey": "TargetEngineType", 
-    "ParameterValue": "sqlserver"
-  },
-  {
-    "ParameterKey": "TableNames",
-    "ParameterValue": "customers,inventory,order_items,orders,products"
-  },
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"customers\":\"customer_id\"}"
-  }
-]
+{
+  "SourceEngineType": "sqlserver",
+  "TargetEngineType": "sqlserver",
+  "TableNames": "customers,inventory,order_items,orders,products",
+  "ManualBookmarkConfig": "{\"customers\":\"customer_id\"}"
+}
 ```
 
 **Configuration Content:**
@@ -437,23 +410,17 @@ EOF
 python -m json.tool manual-bookmark-config.json
 ```
 
-#### Step 3: Add to CloudFormation Parameters File
+#### Step 3: Add to Parameters File
 ```bash
-# Create or update your parameters file (e.g., my-parameters.json)
-# Add the ManualBookmarkConfig parameter in CloudFormation format:
+# Create or update your parameters file (e.g., my-parameters.tfvars.json)
+# Add the ManualBookmarkConfig parameter:
 ```
 
 ```json
-[
-  {
-    "ParameterKey": "JobName",
-    "ParameterValue": "my-replication-job"
-  },
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"employees\":\"updated_at\",\"orders\":\"order_id\"}"
-  }
-]
+{
+  "JobName": "my-replication-job",
+  "ManualBookmarkConfig": "{\"employees\":\"updated_at\",\"orders\":\"order_id\"}"
+}
 ```
 
 #### Step 4: Deploy Using the Deploy Script
@@ -662,18 +629,12 @@ ManualConfigValidationFailureAlarm:
 ## Common Use Cases
 
 ### E-commerce (SQL Server to SQL Server)
-**Based on `examples/sqlserver-to-sqlserver-parameters-with-manual-bookmarks.json`:**
+**Based on `examples/sqlserver-to-sqlserver-parameters-with-manual-bookmarks.tfvars.json`:**
 ```json
-[
-  {
-    "ParameterKey": "TableNames",
-    "ParameterValue": "customers,inventory,order_items,orders,products"
-  },
-  {
-    "ParameterKey": "ManualBookmarkConfig",
-    "ParameterValue": "{\"customers\":\"customer_id\"}"
-  }
-]
+{
+  "TableNames": "customers,inventory,order_items,orders,products",
+  "ManualBookmarkConfig": "{\"customers\":\"customer_id\"}"
+}
 ```
 
 **Configuration Content:**

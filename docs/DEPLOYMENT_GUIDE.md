@@ -131,36 +131,24 @@ The solution supports AWS Glue Connections for enhanced security and centralized
 **Option 1: Create New Glue Connections with Secrets Manager Integration**
 ```json
 {
-  "ParameterKey": "CreateSourceConnection",
-  "ParameterValue": "true"
-},
-{
-  "ParameterKey": "CreateTargetConnection", 
-  "ParameterValue": "true"
+  "CreateSourceConnection": "true",
+  "CreateTargetConnection": "true"
 }
 ```
 
 **Option 2: Use Existing Glue Connections**
 ```json
 {
-  "ParameterKey": "UseSourceConnection",
-  "ParameterValue": "my-existing-oracle-connection"
-},
-{
-  "ParameterKey": "UseTargetConnection",
-  "ParameterValue": "my-existing-postgres-connection"
+  "UseSourceConnection": "my-existing-oracle-connection",
+  "UseTargetConnection": "my-existing-postgres-connection"
 }
 ```
 
 **Option 3: Mixed Configuration**
 ```json
 {
-  "ParameterKey": "CreateSourceConnection",
-  "ParameterValue": "true"
-},
-{
-  "ParameterKey": "UseTargetConnection",
-  "ParameterValue": "existing-target-connection"
+  "CreateSourceConnection": "true",
+  "UseTargetConnection": "existing-target-connection"
 }
 ```
 
@@ -306,8 +294,7 @@ Controls how row counts are obtained during migration.
 
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "auto"
+  "CountingStrategy": "auto"
 }
 ```
 
@@ -358,8 +345,7 @@ Controls how frequently progress metrics are emitted to CloudWatch and logs.
 
 ```json
 {
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "60"
+  "ProgressUpdateInterval": "60"
 }
 ```
 
@@ -381,8 +367,7 @@ Threshold parameter for backward compatibility. With the SQL COUNT(*) optimizati
 
 ```json
 {
-  "ParameterKey": "BatchSizeThreshold",
-  "ParameterValue": "1000000"
+  "BatchSizeThreshold": "1000000"
 }
 ```
 
@@ -396,8 +381,7 @@ Enables comprehensive CloudWatch metrics for migration monitoring.
 
 ```json
 {
-  "ParameterKey": "EnableDetailedMetrics",
-  "ParameterValue": "true"
+  "EnableDetailedMetrics": "true"
 }
 ```
 
@@ -427,20 +411,10 @@ The `auto` strategy now uses SQL COUNT(*) for all sources, providing:
 **Example Configuration**:
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "auto"
-},
-{
-  "ParameterKey": "WorkerType",
-  "ParameterValue": "G.2X"
-},
-{
-  "ParameterKey": "NumberOfWorkers",
-  "ParameterValue": "5"
-},
-{
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "60"
+  "CountingStrategy": "auto",
+  "WorkerType": "G.2X",
+  "NumberOfWorkers": "5",
+  "ProgressUpdateInterval": "60"
 }
 ```
 
@@ -458,20 +432,10 @@ The `auto` strategy now uses SQL COUNT(*) for all sources, providing:
 **Example Configuration**:
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "immediate"
-},
-{
-  "ParameterKey": "WorkerType",
-  "ParameterValue": "G.1X"
-},
-{
-  "ParameterKey": "NumberOfWorkers",
-  "ParameterValue": "2"
-},
-{
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "30"
+  "CountingStrategy": "immediate",
+  "WorkerType": "G.1X",
+  "NumberOfWorkers": "2",
+  "ProgressUpdateInterval": "30"
 }
 ```
 
@@ -489,20 +453,10 @@ The `auto` strategy now uses SQL COUNT(*) for all sources, providing:
 **Example Configuration**:
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "deferred"
-},
-{
-  "ParameterKey": "WorkerType",
-  "ParameterValue": "G.2X"
-},
-{
-  "ParameterKey": "NumberOfWorkers",
-  "ParameterValue": "10"
-},
-{
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "60"
+  "CountingStrategy": "deferred",
+  "WorkerType": "G.2X",
+  "NumberOfWorkers": "10",
+  "ProgressUpdateInterval": "60"
 }
 ```
 
@@ -519,8 +473,7 @@ When migrating large datasets (1TB+), the SQL COUNT(*) optimization ensures opti
 
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "auto"
+  "CountingStrategy": "auto"
 }
 ```
 
@@ -530,12 +483,8 @@ SQL COUNT(*) is fast for all dataset sizes because it uses database statistics (
 
 ```json
 {
-  "ParameterKey": "WorkerType",
-  "ParameterValue": "G.2X"
-},
-{
-  "ParameterKey": "NumberOfWorkers",
-  "ParameterValue": "10"
+  "WorkerType": "G.2X",
+  "NumberOfWorkers": "10"
 }
 ```
 
@@ -545,8 +494,7 @@ Use G.2X workers with 10+ workers for parallel processing of large datasets.
 
 ```json
 {
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "120"
+  "ProgressUpdateInterval": "120"
 }
 ```
 
@@ -556,8 +504,7 @@ For long-running jobs (>2 hours), reduce update frequency to minimize CloudWatch
 
 ```json
 {
-  "ParameterKey": "EnableDetailedMetrics",
-  "ParameterValue": "true"
+  "EnableDetailedMetrics": "true"
 }
 ```
 
@@ -567,8 +514,7 @@ Monitor migration phases to identify bottlenecks and optimize future runs.
 
 ```json
 {
-  "ParameterKey": "Timeout",
-  "ParameterValue": "2880"
+  "Timeout": "2880"
 }
 ```
 
@@ -644,28 +590,12 @@ Balance between visibility and cost:
 
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "auto"
-},
-{
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "60"
-},
-{
-  "ParameterKey": "EnableDetailedMetrics",
-  "ParameterValue": "true"
-},
-{
-  "ParameterKey": "WorkerType",
-  "ParameterValue": "G.2X"
-},
-{
-  "ParameterKey": "NumberOfWorkers",
-  "ParameterValue": "10"
-},
-{
-  "ParameterKey": "Timeout",
-  "ParameterValue": "2880"
+  "CountingStrategy": "auto",
+  "ProgressUpdateInterval": "60",
+  "EnableDetailedMetrics": "true",
+  "WorkerType": "G.2X",
+  "NumberOfWorkers": "10",
+  "Timeout": "2880"
 }
 ```
 
@@ -681,24 +611,11 @@ Balance between visibility and cost:
 
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "auto"
-},
-{
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "30"
-},
-{
-  "ParameterKey": "EnableDetailedMetrics",
-  "ParameterValue": "true"
-},
-{
-  "ParameterKey": "WorkerType",
-  "ParameterValue": "G.1X"
-},
-{
-  "ParameterKey": "NumberOfWorkers",
-  "ParameterValue": "2"
+  "CountingStrategy": "auto",
+  "ProgressUpdateInterval": "30",
+  "EnableDetailedMetrics": "true",
+  "WorkerType": "G.1X",
+  "NumberOfWorkers": "2"
 }
 ```
 
@@ -713,24 +630,11 @@ Balance between visibility and cost:
 
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "auto"
-},
-{
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "60"
-},
-{
-  "ParameterKey": "EnableDetailedMetrics",
-  "ParameterValue": "true"
-},
-{
-  "ParameterKey": "WorkerType",
-  "ParameterValue": "G.2X"
-},
-{
-  "ParameterKey": "NumberOfWorkers",
-  "ParameterValue": "5"
+  "CountingStrategy": "auto",
+  "ProgressUpdateInterval": "60",
+  "EnableDetailedMetrics": "true",
+  "WorkerType": "G.2X",
+  "NumberOfWorkers": "5"
 }
 ```
 
@@ -871,20 +775,10 @@ If you have existing parameter files without performance parameters, add these d
 
 ```json
 {
-  "ParameterKey": "CountingStrategy",
-  "ParameterValue": "auto"
-},
-{
-  "ParameterKey": "ProgressUpdateInterval",
-  "ParameterValue": "60"
-},
-{
-  "ParameterKey": "BatchSizeThreshold",
-  "ParameterValue": "1000000"
-},
-{
-  "ParameterKey": "EnableDetailedMetrics",
-  "ParameterValue": "true"
+  "CountingStrategy": "auto",
+  "ProgressUpdateInterval": "60",
+  "BatchSizeThreshold": "1000000",
+  "EnableDetailedMetrics": "true"
 }
 ```
 

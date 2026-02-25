@@ -302,8 +302,7 @@ s3://company-datalake/
 **Configuration:**
 ```json
 {
-    "ParameterKey": "TargetWarehouseLocation",
-    "ParameterValue": "s3://company-datalake/warehouse/"
+    "TargetWarehouseLocation": "s3://company-datalake/warehouse/"
 }
 ```
 
@@ -809,8 +808,7 @@ When using Iceberg as source, you can query historical data by setting the Sourc
 
 ```json
 {
-    "ParameterKey": "SourceQuery", 
-    "ParameterValue": "SELECT * FROM glue_catalog.analytics_db.customer_orders FOR SYSTEM_TIME AS OF '2024-01-01 00:00:00'"
+    "SourceQuery": "SELECT * FROM glue_catalog.analytics_db.customer_orders FOR SYSTEM_TIME AS OF '2024-01-01 00:00:00'"
 }
 ```
 

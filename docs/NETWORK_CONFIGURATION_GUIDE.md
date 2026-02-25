@@ -518,52 +518,17 @@ aws glue get-connection --name source-connection \
 
 ```json
 {
-  "Parameters": [
-    {
-      "ParameterKey": "JobName",
-      "ParameterValue": "enterprise-cross-vpc-replication"
-    },
-    {
-      "ParameterKey": "SourceEngineType",
-      "ParameterValue": "oracle"
-    },
-    {
-      "ParameterKey": "TargetEngineType",
-      "ParameterValue": "postgresql"
-    },
-    {
-      "ParameterKey": "SourceVpcId",
-      "ParameterValue": "vpc-prod-oracle-123"
-    },
-    {
-      "ParameterKey": "SourceSubnetIds",
-      "ParameterValue": "subnet-prod-db-1a,subnet-prod-db-1b"
-    },
-    {
-      "ParameterKey": "SourceSecurityGroupIds",
-      "ParameterValue": "sg-oracle-glue-access"
-    },
-    {
-      "ParameterKey": "CreateSourceS3VpcEndpoint",
-      "ParameterValue": "YES"
-    },
-    {
-      "ParameterKey": "TargetVpcId",
-      "ParameterValue": "vpc-analytics-456"
-    },
-    {
-      "ParameterKey": "TargetSubnetIds",
-      "ParameterValue": "subnet-analytics-1a,subnet-analytics-1b"
-    },
-    {
-      "ParameterKey": "TargetSecurityGroupIds",
-      "ParameterValue": "sg-postgres-glue-access"
-    },
-    {
-      "ParameterKey": "CreateTargetS3VpcEndpoint",
-      "ParameterValue": "YES"
-    }
-  ]
+  "JobName": "enterprise-cross-vpc-replication",
+  "SourceEngineType": "oracle",
+  "TargetEngineType": "postgresql",
+  "SourceVpcId": "vpc-prod-oracle-123",
+  "SourceSubnetIds": "subnet-prod-db-1a,subnet-prod-db-1b",
+  "SourceSecurityGroupIds": "sg-oracle-glue-access",
+  "CreateSourceS3VpcEndpoint": "YES",
+  "TargetVpcId": "vpc-analytics-456",
+  "TargetSubnetIds": "subnet-analytics-1a,subnet-analytics-1b",
+  "TargetSecurityGroupIds": "sg-postgres-glue-access",
+  "CreateTargetS3VpcEndpoint": "YES"
 }
 ```
 
@@ -571,36 +536,13 @@ aws glue get-connection --name source-connection \
 
 ```json
 {
-  "Parameters": [
-    {
-      "ParameterKey": "JobName",
-      "ParameterValue": "hybrid-cloud-replication"
-    },
-    {
-      "ParameterKey": "SourceEngineType",
-      "ParameterValue": "sqlserver"
-    },
-    {
-      "ParameterKey": "TargetEngineType",
-      "ParameterValue": "postgresql"
-    },
-    {
-      "ParameterKey": "SourceVpcId",
-      "ParameterValue": "vpc-onprem-connection"
-    },
-    {
-      "ParameterKey": "SourceSubnetIds",
-      "ParameterValue": "subnet-dx-1a,subnet-dx-1b"
-    },
-    {
-      "ParameterKey": "SourceSecurityGroupIds",
-      "ParameterValue": "sg-onprem-sqlserver"
-    },
-    {
-      "ParameterKey": "CreateSourceS3VpcEndpoint",
-      "ParameterValue": "NO"
-    }
-  ]
+  "JobName": "hybrid-cloud-replication",
+  "SourceEngineType": "sqlserver",
+  "TargetEngineType": "postgresql",
+  "SourceVpcId": "vpc-onprem-connection",
+  "SourceSubnetIds": "subnet-dx-1a,subnet-dx-1b",
+  "SourceSecurityGroupIds": "sg-onprem-sqlserver",
+  "CreateSourceS3VpcEndpoint": "NO"
 }
 ```
 
