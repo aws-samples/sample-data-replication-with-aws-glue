@@ -348,7 +348,6 @@ resource "aws_iam_role_policy" "glue_job" {
             "ec2:DescribeTags",
             "ec2:DescribeVpcEndpoints",
             "ec2:DescribeVpcEndpointServices",
-            "ec2:DescribeRouteTables",
             "ec2:DescribeSecurityGroups",
             "ec2:DescribeSubnets",
             "ec2:DescribeVpcs",

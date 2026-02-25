@@ -56,7 +56,6 @@
       ],
       "Resource": [
         "arn:aws:iam::*:role/*-glue-job-role",
-        "arn:aws:iam::*:role/*-route-table-lookup-role",
         "arn:aws:iam::*:policy/GlueDataReplication*"
       ]
     },
@@ -65,14 +64,12 @@
       "Effect": "Allow",
       "Action": "iam:PassRole",
       "Resource": [
-        "arn:aws:iam::*:role/*-glue-job-role",
-        "arn:aws:iam::*:role/*-route-table-lookup-role"
+        "arn:aws:iam::*:role/*-glue-job-role"
       ],
       "Condition": {
         "StringEquals": {
           "iam:PassedToService": [
-            "glue.amazonaws.com",
-            "lambda.amazonaws.com"
+            "glue.amazonaws.com"
           ]
         }
       }
@@ -163,24 +160,6 @@
         "ec2:DescribeTags"
       ],
       "Resource": "*"
-    },
-    {
-      "Sid": "LambdaFunctionManagement",
-      "Effect": "Allow",
-      "Action": [
-        "lambda:CreateFunction",
-        "lambda:DeleteFunction",
-        "lambda:GetFunction",
-        "lambda:UpdateFunctionCode",
-        "lambda:UpdateFunctionConfiguration",
-        "lambda:InvokeFunction",
-        "lambda:ListFunctions",
-        "lambda:TagResource",
-        "lambda:UntagResource"
-      ],
-      "Resource": [
-        "arn:aws:lambda:*:*:function:*-route-table-lookup"
-      ]
     },
     {
       "Sid": "SecretsManagerManagement",

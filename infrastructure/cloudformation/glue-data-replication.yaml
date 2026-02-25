@@ -968,7 +968,6 @@ Resources:
                   - ec2:DescribeTags
                   - ec2:DescribeVpcEndpoints
                   - ec2:DescribeVpcEndpointServices
-                  - ec2:DescribeRouteTables
                   - ec2:DescribeSecurityGroups
                   - ec2:DescribeSubnets
                   - ec2:DescribeVpcs
