@@ -790,6 +790,7 @@ If you have existing parameter files without performance parameters, add these d
 - **Parameter Reference**: See `docs/PARAMETER_REFERENCE.md` for all parameter descriptions
 - **Monitoring Guide**: See `docs/PERFORMANCE_MONITORING_GUIDE.md` for CloudWatch dashboard setup
 - **API Reference**: See `docs/API_REFERENCE.md` for component documentation
+- **Standalone JDBC Connection**: See `docs/GLUE_JDBC_CONNECTION_GUIDE.md` to create Glue JDBC Connections independently without the full stack
 
 ## Troubleshooting
 
